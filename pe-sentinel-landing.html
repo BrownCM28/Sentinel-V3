@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PE Sentinel AI — AI Automation for Private Equity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      background: #faf8f2;
+      color: #1a1915;
+      overflow-x: hidden;
+    }
+
+    /* ── CSS Variables ── */
+    :root {
+      --ink:   #1a1915;
+      --cream: #f5eed7;
+      --warm:  #ebe3cb;
+      --white: #faf8f2;
+      --rust:  #b5704f;
+      --gray:  #dddbd6;
+    }
+
+    /* ── Grain Overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0.01;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 18px;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(245,238,215,0.65);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: transparent;
+      border: 1px solid rgba(245,238,215,0.5);
+      padding: 9px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--cream);
+      color: var(--ink);
+      border-color: var(--cream);
+    }
+
+    /* ── Full-screen Panels ── */
+    .panel {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 36px;
+      text-align: center;
+    }
+    .panel-inner { max-width: 720px; }
+    .panel-ink   { background: var(--ink); }
+    .panel-cream { background: var(--cream); }
+    .panel-warm  { background: var(--warm); }
+
+    /* Panel headline */
+    .panel h1, .panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    .panel-ink h1, .panel-ink h2   { color: var(--cream); }
+    .panel-cream h2                { color: var(--ink); }
+    .panel-warm h2                 { color: var(--ink); }
+
+    .panel p {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+    }
+    .panel-ink p   { color: rgba(245,238,215,0.55); }
+    .panel-cream p { color: rgba(26,25,21,0.65); }
+    .panel-warm p  { color: rgba(26,25,21,0.65); }
+
+    /* ── Hero Panel ── */
+    #hero { padding-top: 140px; }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      border: 1px solid rgba(181,112,79,0.4);
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 28px;
+    }
+    .hero-headline {
+      font-size: clamp(34px, 6vw, 68px);
+      color: var(--cream);
+      margin-bottom: 28px;
+    }
+    .hero-sub {
+      font-size: clamp(15px, 1.6vw, 18px);
+      color: rgba(245,238,215,0.45);
+      max-width: 600px;
+      margin: 0 auto 22px;
+    }
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: rgba(245,238,215,0.28);
+      margin-bottom: 40px;
+    }
+    .btn {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 13px 28px;
+      border-radius: 3px;
+      border: 1px solid;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .btn-outline-cream {
+      color: var(--cream);
+      border-color: rgba(245,238,215,0.5);
+      background: transparent;
+    }
+    .btn-outline-cream:hover {
+      background: var(--cream);
+      color: var(--ink);
+      border-color: var(--cream);
+    }
+    .btn-outline-ink {
+      color: var(--ink);
+      border-color: rgba(26,25,21,0.3);
+      background: transparent;
+    }
+    .btn-outline-ink:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    /* ── Section Anatomy ── */
+    section {
+      padding: 100px 36px;
+    }
+    .sec-inner { max-width: 1080px; margin: 0 auto; text-align: center; }
+    .sec-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.25;
+      margin-bottom: 16px;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.5vw, 50px);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .sec-rule {
+      width: 40px;
+      height: 2px;
+      background: var(--rust);
+      margin: 0 auto 56px;
+    }
+
+    /* ── Stats Bar ── */
+    #stats { background: var(--cream); padding: 80px 36px; }
+    .stats-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .proof-card {
+      background: var(--white);
+      border-radius: 6px;
+      border: 1px solid rgba(26,25,21,0.05);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .proof-stat {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+    .proof-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(26,25,21,0.65);
+      line-height: 1.5;
+    }
+
+    /* ── Use Cases ── */
+    #solutions { background: var(--white); }
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .uc-card {
+      background: var(--cream);
+      border-radius: 6px;
+      border: 1px solid rgba(26,25,21,0.03);
+      padding: 36px 28px;
+      text-align: left;
+    }
+    .uc-icon {
+      font-size: 22px;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .uc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .uc-liner {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 14px;
+    }
+    .uc-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(26,25,21,0.65);
+      line-height: 1.65;
+    }
+
+    /* ── How It Works ── */
+    #process { background: var(--cream); }
+    .proc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .proc-card {
+      text-align: left;
+      padding: 8px 4px;
+    }
+    .proc-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      color: rgba(26,25,21,0.08);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .proc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .proc-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(26,25,21,0.65);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+    .proc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .proc-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rust);
+      border: 1px solid rgba(181,112,79,0.3);
+      padding: 3px 9px;
+      border-radius: 3px;
+    }
+    .proc-tag.free { background: rgba(181,112,79,0.08); }
+
+    /* ── Pricing ── */
+    #pricing { background: var(--warm); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .price-card {
+      background: var(--white);
+      border-radius: 6px;
+      border: 1px solid rgba(26,25,21,0.05);
+      padding: 40px 32px;
+    }
+    .price-card.feat {
+      background: var(--ink);
+      border-color: transparent;
+      position: relative;
+    }
+    .price-card.feat::before {
+      content: 'Recommended';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rust);
+      background: var(--warm);
+      padding: 3px 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(181,112,79,0.3);
+      white-space: nowrap;
+    }
+    .price-tier {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(26,25,21,0.4);
+      margin-bottom: 12px;
+    }
+    .price-card.feat .price-tier { color: rgba(245,238,215,0.4); }
+    .price-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .price-card.feat .price-name { color: var(--cream); }
+    .price-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(26,25,21,0.6);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(26,25,21,0.07);
+    }
+    .price-card.feat .price-desc { color: rgba(245,238,215,0.5); border-bottom-color: rgba(245,238,215,0.1); }
+    .price-inc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(26,25,21,0.4);
+      margin-bottom: 14px;
+    }
+    .price-card.feat .price-inc { color: rgba(245,238,215,0.35); }
+    .price-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .price-features li {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(26,25,21,0.7);
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(26,25,21,0.05);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .price-features li::before {
+      content: '—';
+      color: var(--rust);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .price-card.feat .price-features li {
+      color: rgba(245,238,215,0.6);
+      border-bottom-color: rgba(245,238,215,0.07);
+    }
+    .btn-price-default {
+      display: block;
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 1px solid rgba(26,25,21,0.25);
+      background: transparent;
+      padding: 13px 24px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-price-default:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+    .btn-price-feat {
+      display: block;
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 1px solid var(--cream);
+      background: var(--cream);
+      padding: 13px 24px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-price-feat:hover {
+      background: transparent;
+      color: var(--cream);
+    }
+
+    /* ── Testimonials ── */
+    #testimonials { background: var(--white); }
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .test-card {
+      background: var(--cream);
+      border-radius: 6px;
+      border: 1px solid rgba(26,25,21,0.04);
+      padding: 36px 28px;
+    }
+    .test-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .test-author {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: rgba(26,25,21,0.5);
+    }
+    .test-author strong {
+      color: var(--rust);
+      font-weight: 400;
+    }
+    .proof-label-center {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.3;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* ── Final CTA ── */
+    #consultation {
+      background: var(--ink);
+      padding: 120px 36px;
+      text-align: center;
+    }
+    .cta-wrap { max-width: 640px; margin: 0 auto; }
+    .cta-wrap h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 22px;
+    }
+    .cta-wrap p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(245,238,215,0.45);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(245,238,215,0.06);
+      padding: 56px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+    .foot-brand {}
+    .foot-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--cream);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .foot-tagline {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(245,238,215,0.35);
+    }
+    .foot-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    .foot-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: rgba(245,238,215,0.45);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .foot-links a:hover { color: var(--cream); }
+
+    /* ── Mobile Sticky CTA ── */
+    .sticky-mobile {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 850;
+      background: var(--cream);
+      padding: 14px 24px;
+      text-align: center;
+    }
+    .sticky-mobile a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      display: block;
+      width: 100%;
+    }
+
+    /* ── Fade-in Animations ── */
+    .fi {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fi.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .proc-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      section { padding: 72px 20px; }
+      .panel { padding: 100px 20px; }
+      #hero { padding-top: 110px; }
+      .uc-grid { grid-template-columns: 1fr; }
+      .test-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .proc-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; align-items: flex-start; padding: 40px 20px; }
+      .sticky-mobile { display: block; }
+      body { padding-bottom: 60px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="#" class="nav-logo">PE Sentinel AI</a>
+    <ul class="nav-links">
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#testimonials">Results</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a class="nav-cta" href="#consultation">Book Free Consultation</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero Panel (panel-ink) ── -->
+  <section class="panel panel-ink" id="hero">
+    <div class="panel-inner fi">
+      <span class="hero-tag">Private Equity AI Automation</span>
+      <h1 class="hero-headline">Close more deals.<br>Cut the noise.<br>Deploy AI.</h1>
+      <p class="hero-sub">PE Sentinel AI builds custom automation systems for PE firms and search fund operators — compressing deal timelines, eliminating manual overhead, and keeping you ahead of every opportunity.</p>
+      <p class="hero-tagline">Your unfair advantage in a competitive market.</p>
+      <a href="#consultation" class="btn btn-outline-cream">Book a Free Consultation Call Now</a>
+    </div>
+  </section>
+
+  <!-- ── Problem Panel (panel-cream) ── -->
+  <div class="panel panel-cream">
+    <div class="panel-inner fi">
+      <h2 style="font-size: clamp(30px, 4vw, 54px);">Your analysts are drowning in spreadsheets.</h2>
+      <p style="margin-top: 28px; font-size: clamp(15px, 1.5vw, 18px);">Deal flow is leaking. Portfolio monitoring is reactive. LP reports take days. You're running a sophisticated firm on tools that weren't built for it.</p>
+    </div>
+  </div>
+
+  <!-- ── Agitation Panel (panel-ink) ── -->
+  <div class="panel panel-ink">
+    <div class="panel-inner fi">
+      <h2 style="font-size: clamp(28px, 3.8vw, 52px);">Every day without automation is capital left on the table.</h2>
+      <p style="margin-top: 28px; font-size: clamp(15px, 1.5vw, 18px);">Your competitors are already using AI to source faster, screen smarter, and operate leaner. The window to gain an edge is closing.</p>
+    </div>
+  </div>
+
+  <!-- ── Solution Panel (panel-warm) ── -->
+  <div class="panel panel-warm">
+    <div class="panel-inner fi">
+      <h2 style="font-size: clamp(28px, 3.8vw, 52px);">We build the AI infrastructure your firm actually needs.</h2>
+      <p style="margin-top: 28px; font-size: clamp(15px, 1.5vw, 18px);">Not generic SaaS. Not off-the-shelf tools. Custom AI systems designed for how PE firms operate — deployed in weeks, not months.</p>
+    </div>
+  </div>
+
+  <!-- ── Stats Bar ── -->
+  <section id="stats">
+    <p class="stats-label fi">Deployed across PE &amp; VC firms</p>
+    <div class="stats-grid">
+      <div class="proof-card fi" data-card="0">
+        <div class="proof-stat">47%</div>
+        <div class="proof-desc">faster deal screening on average</div>
+      </div>
+      <div class="proof-card fi" data-card="1">
+        <div class="proof-stat">$2.3B+</div>
+        <div class="proof-desc">in deal flow processed through our systems</div>
+      </div>
+      <div class="proof-card fi" data-card="2">
+        <div class="proof-stat">150+</div>
+        <div class="proof-desc">automated workflows deployed</div>
+      </div>
+      <div class="proof-card fi" data-card="3">
+        <div class="proof-stat">&lt; 3 wks</div>
+        <div class="proof-desc">average time from audit to live deployment</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Use Cases / Solutions Grid ── -->
+  <section id="solutions">
+    <div class="sec-inner">
+      <p class="sec-label fi">What we automate</p>
+      <h2 class="sec-title fi">The workflows stealing your team's time</h2>
+      <div class="sec-rule fi"></div>
+      <div class="uc-grid">
+
+        <div class="uc-card fi" data-card="0">
+          <span class="uc-icon">🔍</span>
+          <div class="uc-name">Deal Sourcing Engine</div>
+          <div class="uc-liner">Automated pipeline</div>
+          <p class="uc-desc">AI-powered target identification, scoring, and outreach sequences. Never miss a deal because of bandwidth.</p>
+        </div>
+
+        <div class="uc-card fi" data-card="1">
+          <span class="uc-icon">📊</span>
+          <div class="uc-name">Portfolio Monitoring</div>
+          <div class="uc-liner">Always-on intelligence</div>
+          <p class="uc-desc">Automated data aggregation across portfolio companies. Anomalies flagged before they become problems.</p>
+        </div>
+
+        <div class="uc-card fi" data-card="2">
+          <span class="uc-icon">📋</span>
+          <div class="uc-name">Due Diligence Automation</div>
+          <div class="uc-liner">Faster to IC</div>
+          <p class="uc-desc">AI document extraction, data room processing, and structured CIM analysis in hours, not days.</p>
+        </div>
+
+        <div class="uc-card fi" data-card="3">
+          <span class="uc-icon">📬</span>
+          <div class="uc-name">LP Reporting</div>
+          <div class="uc-liner">Reports that write themselves</div>
+          <p class="uc-desc">Automated narrative generation, data population, and distribution. Quarterly reports in a fraction of the time.</p>
+        </div>
+
+        <div class="uc-card fi" data-card="4">
+          <span class="uc-icon">🤖</span>
+          <div class="uc-name">AI Agent Infrastructure</div>
+          <div class="uc-liner">Agents that work 24/7</div>
+          <p class="uc-desc">Custom-built agents that monitor, flag, act, and report — without human intervention.</p>
+        </div>
+
+        <div class="uc-card fi" data-card="5">
+          <span class="uc-icon">📈</span>
+          <div class="uc-name">CRM Enrichment</div>
+          <div class="uc-liner">Clean data, always</div>
+          <p class="uc-desc">Automated enrichment, deduplication, and scoring across your pipeline. Your CRM finally works for you.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section id="process">
+    <div class="sec-inner">
+      <p class="sec-label fi">The process</p>
+      <h2 class="sec-title fi">From audit to automation in weeks</h2>
+      <div class="sec-rule fi"></div>
+      <div class="proc-grid">
+
+        <div class="proc-card fi" data-card="0">
+          <div class="proc-num">1</div>
+          <div class="proc-name">Audit</div>
+          <p class="proc-desc">We map your current workflows, identify automation opportunities, and calculate the ROI.</p>
+          <div class="proc-meta">
+            <span class="proc-tag">Week 1</span>
+            <span class="proc-tag free">Free</span>
+          </div>
+        </div>
+
+        <div class="proc-card fi" data-card="1">
+          <div class="proc-num">2</div>
+          <div class="proc-name">Design</div>
+          <p class="proc-desc">Custom AI architecture designed for your firm's specific deal flow and operational model.</p>
+          <div class="proc-meta">
+            <span class="proc-tag">Week 1–2</span>
+          </div>
+        </div>
+
+        <div class="proc-card fi" data-card="2">
+          <div class="proc-num">3</div>
+          <div class="proc-name">Deploy</div>
+          <p class="proc-desc">We build, test, and launch your systems. Your team onboarded and confident.</p>
+          <div class="proc-meta">
+            <span class="proc-tag">Weeks 2–3</span>
+          </div>
+        </div>
+
+        <div class="proc-card fi" data-card="3">
+          <div class="proc-num">4</div>
+          <div class="proc-name">Operate</div>
+          <p class="proc-desc">Ongoing monitoring, optimization, and support. We manage it so you don't have to.</p>
+          <div class="proc-meta">
+            <span class="proc-tag">Ongoing</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pricing ── -->
+  <section id="pricing">
+    <div class="sec-inner">
+      <p class="sec-label fi">Packages</p>
+      <h2 class="sec-title fi">The more we automate, the more deals you close</h2>
+      <div class="sec-rule fi"></div>
+      <div class="pricing-grid">
+
+        <!-- Card 1: Deal Flow Engine -->
+        <div class="price-card fi" data-card="0">
+          <p class="price-tier">For micro PE &amp; search fund searchers</p>
+          <h3 class="price-name">Deal Flow Engine</h3>
+          <p class="price-desc">Your unfair advantage in sourcing. One focused automation system that fills your pipeline.</p>
+          <ul class="price-features">
+            <li>Automated deal sourcing pipeline</li>
+            <li>CRM enrichment &amp; target scoring</li>
+            <li>Outreach sequence automation</li>
+            <li>Email &amp; Slack deal alerts</li>
+            <li>Basic reporting dashboard</li>
+            <li>Setup &amp; onboarding included</li>
+          </ul>
+          <a href="#consultation" class="btn-price-default">Book a Call</a>
+        </div>
+
+        <!-- Card 2: Growth Stack (featured) -->
+        <div class="price-card feat fi" data-card="1">
+          <p class="price-tier">For small PE firms scaling operations</p>
+          <h3 class="price-name">Growth Stack</h3>
+          <p class="price-desc">Multiple automation systems working in concert. Reclaim 10+ hours a week across your team.</p>
+          <p class="price-inc">Everything in Deal Flow Engine, plus:</p>
+          <ul class="price-features">
+            <li>Portfolio company monitoring</li>
+            <li>LP report automation</li>
+            <li>Due diligence data aggregation</li>
+            <li>AI document processing &amp; extraction</li>
+            <li>3 custom automated workflows</li>
+            <li>Bi-weekly strategy sessions</li>
+          </ul>
+          <a href="#consultation" class="btn-price-feat">Book a Call</a>
+        </div>
+
+        <!-- Card 3: The Sentinel -->
+        <div class="price-card fi" data-card="2">
+          <p class="price-tier">For PE &amp; VC firms that measure everything by ROI</p>
+          <h3 class="price-name">The Sentinel</h3>
+          <p class="price-desc">Fully managed AI infrastructure. Custom dashboard, multiple agents, unlimited workflows. For firms that mean business.</p>
+          <p class="price-inc">Everything in Growth Stack, plus:</p>
+          <ul class="price-features">
+            <li>Fully custom managed dashboard</li>
+            <li>Multiple dedicated AI agents</li>
+            <li>Unlimited automated workflows</li>
+            <li>24/7 system monitoring &amp; support</li>
+            <li>Dedicated AI strategist on retainer</li>
+            <li>Custom integrations (CRM, data rooms, ERP)</li>
+            <li>Quarterly ROI audits &amp; optimization</li>
+          </ul>
+          <a href="#consultation" class="btn-price-default">Deploy The Sentinel</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ── -->
+  <section id="testimonials">
+    <div class="sec-inner">
+      <p class="proof-label-center fi">What our clients say</p>
+      <div class="test-grid">
+
+        <div class="test-card fi" data-card="0">
+          <p class="test-quote">"We cut our IC preparation time by 60%. The due diligence automation alone paid for the entire engagement."</p>
+          <p class="test-author"><strong>Marcus T.</strong> — Managing Partner, Search Fund</p>
+        </div>
+
+        <div class="test-card fi" data-card="1">
+          <p class="test-quote">"Deal flow went from 12 targets a month to 80+. The quality filter means we're only looking at real opportunities."</p>
+          <p class="test-author"><strong>Sarah K.</strong> — Principal, Micro PE Firm</p>
+        </div>
+
+        <div class="test-card fi" data-card="2">
+          <p class="test-quote">"The Sentinel dashboard means I know what's happening across the whole portfolio before my morning coffee."</p>
+          <p class="test-author"><strong>David R.</strong> — Partner, Small-Cap PE</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ── -->
+  <section id="consultation">
+    <div class="cta-wrap fi">
+      <h2>Your next deal is already out there.</h2>
+      <p>15 minutes with a PE AI specialist — we'll show you exactly where your firm is losing time and capital, and what we'd build to fix it. No pitch. No pressure.</p>
+      <a href="#consultation" class="btn btn-outline-cream">Book a Free Consultation Call Now</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="foot-brand">
+      <a href="#" class="foot-logo">PE Sentinel AI</a>
+      <p class="foot-tagline">AI infrastructure for private equity.</p>
+    </div>
+    <ul class="foot-links">
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#consultation">Contact</a></li>
+    </ul>
+  </footer>
+
+  <!-- ── Mobile Sticky CTA ── -->
+  <div class="sticky-mobile">
+    <a href="#consultation">Book a Free Consultation Call Now</a>
+  </div>
+
+  <!-- ── JavaScript: IntersectionObserver + smooth scroll ── -->
+  <script>
+    // Fade-in observer — matches Bonsai pattern
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const cardIndex = el.dataset.card;
+            const delay = cardIndex !== undefined ? parseInt(cardIndex, 10) * 80 : 0;
+            setTimeout(() => {
+              el.classList.add('vis');
+            }, delay);
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll('.fi').forEach((el) => observer.observe(el));
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        const id = anchor.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

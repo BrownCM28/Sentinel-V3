@@ -36,7 +36,7 @@
       inset: 0;
       z-index: 1000;
       pointer-events: none;
-      opacity: 0.01;
+      opacity: 0.035;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
       background-size: 200px 200px;
     }
@@ -48,7 +48,10 @@
       left: 0;
       right: 0;
       z-index: 900;
-      background: var(--ink);
+      background: rgba(245,238,215,0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(26,25,21,0.07);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -59,7 +62,7 @@
       font-family: 'Playfair Display', serif;
       font-weight: 400;
       font-size: 18px;
-      color: var(--cream);
+      color: var(--ink);
       text-decoration: none;
       letter-spacing: 0.02em;
     }
@@ -73,30 +76,30 @@
       font-family: 'DM Sans', sans-serif;
       font-weight: 400;
       font-size: 13px;
-      color: rgba(245,238,215,0.65);
+      color: rgba(26,25,21,0.55);
       text-decoration: none;
       letter-spacing: 0.04em;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover { color: var(--ink); }
     .nav-cta {
       font-family: 'DM Sans', sans-serif;
       font-weight: 400;
       font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--cream);
+      color: var(--ink);
       background: transparent;
-      border: 1px solid rgba(245,238,215,0.5);
+      border: 1px solid rgba(26,25,21,0.3);
       padding: 9px 18px;
       border-radius: 3px;
       text-decoration: none;
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .nav-cta:hover {
-      background: var(--cream);
-      color: var(--ink);
-      border-color: var(--cream);
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
     }
 
     /* ── Full-screen Panels ── */
@@ -133,7 +136,16 @@
     .panel-warm p  { color: rgba(26,25,21,0.65); }
 
     /* ── Hero Panel ── */
-    #hero { padding-top: 140px; }
+    #hero {
+      padding-top: 140px;
+      background:
+        radial-gradient(ellipse at 22% 38%, rgba(168,130,220,0.38) 0%, transparent 52%),
+        radial-gradient(ellipse at 78% 22%, rgba(90,195,240,0.42) 0%, transparent 52%),
+        radial-gradient(ellipse at 62% 72%, rgba(110,215,235,0.30) 0%, transparent 48%),
+        radial-gradient(ellipse at 8%  72%, rgba(195,160,240,0.20) 0%, transparent 44%),
+        radial-gradient(ellipse at 90% 78%, rgba(140,220,210,0.22) 0%, transparent 44%),
+        var(--cream);
+    }
     .hero-tag {
       display: inline-block;
       font-family: 'DM Sans', sans-serif;
@@ -149,12 +161,12 @@
     }
     .hero-headline {
       font-size: clamp(34px, 6vw, 68px);
-      color: var(--cream);
+      color: var(--ink);
       margin-bottom: 28px;
     }
     .hero-sub {
       font-size: clamp(15px, 1.6vw, 18px);
-      color: rgba(245,238,215,0.45);
+      color: rgba(26,25,21,0.55);
       max-width: 600px;
       margin: 0 auto 22px;
     }
@@ -162,7 +174,7 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 15px;
-      color: rgba(245,238,215,0.28);
+      color: rgba(26,25,21,0.32);
       margin-bottom: 40px;
     }
     .btn {
@@ -694,13 +706,13 @@
   </nav>
 
   <!-- ── Hero Panel (panel-ink) ── -->
-  <section class="panel panel-ink" id="hero">
+  <section class="panel" id="hero">
     <div class="panel-inner fi">
       <span class="hero-tag">Private Equity AI Automation</span>
       <h1 class="hero-headline">Close more deals.<br>Cut the noise.<br>Deploy AI.</h1>
       <p class="hero-sub">PE Sentinel AI builds custom automation systems for PE firms and search fund operators — compressing deal timelines, eliminating manual overhead, and keeping you ahead of every opportunity.</p>
       <p class="hero-tagline">Your unfair advantage in a competitive market.</p>
-      <a href="#consultation" class="btn btn-outline-cream">Book a Free Consultation Call Now</a>
+      <a href="#consultation" class="btn btn-outline-ink">Book a Free Consultation Call Now</a>
     </div>
   </section>
 

@@ -7,6 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <!-- Calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
   <style>
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -678,6 +681,84 @@
       transform: translateY(0);
     }
 
+    /* ── Hamburger ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile Menu Drawer ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 12px;
+      right: 12px;
+      z-index: 899;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      padding: 20px 24px;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a,
+    .mobile-menu button {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      padding: 12px 4px;
+      border-bottom: 1px solid rgba(26,25,21,0.06);
+      width: 100%;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:last-child,
+    .mobile-menu button:last-child { border-bottom: none; }
+    .mobile-menu a:hover,
+    .mobile-menu button:hover { color: var(--rust); }
+    .mobile-menu .mobile-cta {
+      margin-top: 8px;
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 50px;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 13px;
+      border: none;
+      border-bottom: none !important;
+    }
+    .mobile-menu .mobile-cta:hover { background: var(--rust); color: var(--cream); }
+
     /* ── Responsive ── */
     @media (max-width: 1024px) {
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
@@ -687,6 +768,7 @@
     @media (max-width: 768px) {
       nav { top: 10px; left: 12px; right: 12px; padding: 0 20px; }
       .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
       section { padding: 72px 20px; }
       .panel { padding: 100px 20px; }
       #hero { padding-top: 110px; }
@@ -715,9 +797,21 @@
       <li><a href="#process">How It Works</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#pricing">Pricing</a></li>
-      <li><a class="nav-cta" href="#consultation">Book Free Consultation</a></li>
+      <li><button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="nav-cta">Book Free Consultation</button></li>
     </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- ── Mobile Menu ── -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#solutions" class="mobile-link">Solutions</a>
+    <a href="#process" class="mobile-link">How It Works</a>
+    <a href="#team" class="mobile-link">Team</a>
+    <a href="#pricing" class="mobile-link">Pricing</a>
+    <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');return false;" class="mobile-cta">Book Free Consultation</button>
+  </div>
 
   <!-- ── Hero Panel ── -->
   <section class="panel" id="hero">
@@ -726,7 +820,7 @@
       <h1 class="hero-headline">Close more deals.<br>Cut the noise.<br>Deploy AI.</h1>
       <p class="hero-sub">Sentinel AI builds custom automation systems for PE firms and search fund operators — compressing deal timelines, eliminating manual overhead, and keeping you ahead of every opportunity.</p>
       <p class="hero-tagline">Your unfair advantage in a competitive market.</p>
-      <a href="#consultation" class="btn btn-outline-ink">Book a Free Consultation Call Now</a>
+      <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="btn btn-outline-ink">Book a Free Consultation Call Now</button>
     </div>
   </section>
 
@@ -759,7 +853,7 @@
             <li>Basic reporting dashboard</li>
             <li>Setup &amp; onboarding included</li>
           </ul>
-          <a href="#consultation" class="btn-price-default">Book a Call</a>
+          <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="btn-price-default">Book a Call</button>
         </div>
 
         <!-- Card 2: Growth Stack (featured) -->
@@ -776,7 +870,7 @@
             <li>3 custom automated workflows</li>
             <li>Bi-weekly strategy sessions</li>
           </ul>
-          <a href="#consultation" class="btn-price-feat">Book a Call</a>
+          <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="btn-price-feat">Book a Call</button>
         </div>
 
         <!-- Card 3: The Sentinel -->
@@ -794,7 +888,7 @@
             <li>Custom integrations (CRM, data rooms, ERP)</li>
             <li>Quarterly ROI audits &amp; optimization</li>
           </ul>
-          <a href="#consultation" class="btn-price-default">Deploy The Sentinel</a>
+          <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="btn-price-default">Deploy The Sentinel</button>
         </div>
 
       </div>
@@ -976,7 +1070,7 @@
     <div class="cta-wrap fi">
       <h2>Your next deal is already out there.</h2>
       <p>15 minutes with a PE AI specialist — we'll show you exactly where your firm is losing time and capital, and what we'd build to fix it. No pitch. No pressure.</p>
-      <a href="#consultation" class="btn btn-outline-cream">Book a Free Consultation Call Now</a>
+      <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" class="btn btn-outline-cream">Book a Free Consultation Call Now</button>
     </div>
   </section>
 
@@ -997,8 +1091,11 @@
 
   <!-- ── Mobile Sticky CTA ── -->
   <div class="sticky-mobile">
-    <a href="#consultation">Book a Free Consultation Call Now</a>
+    <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" style="background:none;border:none;cursor:pointer;width:100%;">Book a Free Consultation Call Now</button>
   </div>
+
+  <!-- Calendly badge widget -->
+  <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charlesbmorrisey/30min', text: 'Schedule time with me', color: '#ffffff', textColor: '#000000', branding: true }); }</script>
 
   <!-- ── JavaScript: IntersectionObserver + smooth scroll ── -->
   <script>
@@ -1020,6 +1117,21 @@
     );
 
     document.querySelectorAll('.fi').forEach((el) => observer.observe(el));
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    // Close menu on mobile link click
+    mobileMenu.querySelectorAll('.mobile-link').forEach((link) => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
 
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {

@@ -51,10 +51,10 @@
       left: 24px;
       right: 24px;
       z-index: 900;
-      background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      border: 1px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.45);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255,255,255,0.4);
       border-radius: 50px;
       box-shadow: 0 4px 28px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
       display: flex;
@@ -70,6 +70,14 @@
       color: var(--ink);
       text-decoration: none;
       letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+      display: block;
     }
     .nav-links {
       display: flex;
@@ -486,9 +494,9 @@
     #team { background: #ffffff; }
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 28px;
-      max-width: 720px;
+      max-width: 1080px;
       margin: 0 auto;
     }
     .team-card {
@@ -499,8 +507,8 @@
       text-align: center;
     }
     .team-avatar {
-      width: 72px;
-      height: 72px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
       background: var(--warm);
       margin: 0 auto 22px;
@@ -511,6 +519,13 @@
       font-size: 24px;
       color: var(--rust);
       border: 2px solid rgba(181,112,79,0.2);
+      overflow: hidden;
+    }
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
     }
     .team-name {
       font-family: 'Playfair Display', serif;
@@ -763,6 +778,7 @@
     @media (max-width: 1024px) {
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
       .proc-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
     }
 
     @media (max-width: 768px) {
@@ -791,7 +807,7 @@
 
   <!-- ── Navigation ── -->
   <nav>
-    <a href="#" class="nav-logo">Sentinel AI</a>
+    <a href="#" class="nav-logo"><img src="Sentinel%20Logo/Untitled%20(49).png" alt="Sentinel AI logo">Sentinel AI</a>
     <ul class="nav-links">
       <li><a href="#solutions">Solutions</a></li>
       <li><a href="#process">How It Works</a></li>
@@ -1023,17 +1039,24 @@
       <div class="team-grid">
 
         <div class="team-card fi" data-card="0">
-          <div class="team-avatar">CB</div>
+          <div class="team-avatar"><img src="Team%20Images/1757344475548.jpeg" alt="Charlie Brown"></div>
           <div class="team-name">Charlie Brown</div>
           <div class="team-role">Co-Founder</div>
           <p class="team-bio">Charlie brings deep expertise in AI systems and private equity operations, having spent years at the intersection of technology and deal-making.</p>
         </div>
 
         <div class="team-card fi" data-card="1">
-          <div class="team-avatar">ML</div>
+          <div class="team-avatar"><img src="Team%20Images/1763159724303.jpeg" alt="Madison Lewis"></div>
           <div class="team-name">Madison Lewis</div>
           <div class="team-role">Co-Founder</div>
-          <p class="team-bio">Madison has a background in PE firm operations and automation strategy, with a track record of building scalable systems that accelerate deal flow.</p>
+          <p class="team-bio">Madison is a systems engineer and co-founder focused on helping private equity firms streamline operations and unlock scalable efficiencies. With a background in technical systems and cross-team collaboration, she specializes in designing practical automation solutions that simplify complex workflows and improve decision-making. Her work bridges engineering and business strategy to help portfolio companies operate smarter and move faster.</p>
+        </div>
+
+        <div class="team-card fi" data-card="2">
+          <div class="team-avatar"><img src="Team%20Images/IMG_3890.JPG" alt="Liam Duncan"></div>
+          <div class="team-name">Liam Duncan</div>
+          <div class="team-role">Cloud Architect &amp; AI Distillation Specialist</div>
+          <p class="team-bio">Liam leads cloud infrastructure and AI model distillation at Sentinel, designing the scalable systems that power our automation deployments across PE and VC firms.</p>
         </div>
 
       </div>
@@ -1093,9 +1116,6 @@
   <div class="sticky-mobile">
     <button onclick="Calendly.initPopupWidget({url:'https://calendly.com/charlesbmorrisey/30min'});return false;" style="background:none;border:none;cursor:pointer;width:100%;">Book a Free Consultation Call Now</button>
   </div>
-
-  <!-- Calendly badge widget -->
-  <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charlesbmorrisey/30min', text: 'Schedule time with me', color: '#ffffff', textColor: '#000000', branding: true }); }</script>
 
   <!-- ── JavaScript: IntersectionObserver + smooth scroll ── -->
   <script>
